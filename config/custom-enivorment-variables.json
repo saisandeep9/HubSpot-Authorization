@@ -1,0 +1,7 @@
+{
+  "app": {
+    "CLIENT_ID": "86875988-d9fd-46f6-8ba6-ec33dcc79aba",
+    "REDIRECT_URI": "http://localhost:9000/auth-callback",
+    "SCOPES": 
+  }
+}

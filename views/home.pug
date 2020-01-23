@@ -1,0 +1,23 @@
+doctype html
+html( lang = "en")
+body
+    if token
+        //- p your token is: #{token}
+        //- p data :#{contacts}
+        p your contacts:
+            table
+                tr
+                    th firstname
+                    th last name
+                    th email
+                   
+                
+                each contact in contacts  
+                 tr 
+                  td #{contact.properties.firstname.value}
+                  td #{contact.properties.lastname.value}
+                
+                
+    else
+        p please click #[a(href='${authUrl}') hereto install]
+    
