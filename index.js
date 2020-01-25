@@ -6,25 +6,21 @@ const querystring = require("querystring");
 
 app.set("view engine", "pug");
 
-// const config = require("config");
+const config = require("config");
 
-const CLIENT_ID = "86875988-d9fd-46f6-8ba6-ec33dcc79aba";
-const REDIRECT_URI = "http://localhost:9000/oauth-callback";
-const SCOPES = "contacts";
+const CLIENT_ID = config.get(`app.CLIENT_ID`);
+const REDIRECT_URI = config.get(`app.REDIRECT_URI`);
+const SCOPES = config.get(`app.SCOPES`);
 
 const authUrl =
-  "https://app.hubspot.com/oauth/authorize?client_id=86875988-d9fd-46f6-8ba6-ec33dcc79aba&redirect_uri=http://localhost:9000/oauth-callback&scope=contactshttps://app.hubspot.com/oauth/authorize?client_id=86875988-d9fd-46f6-8ba6-ec33dcc79aba&redirect_uri=http://localhost:9000/oauth-callback&scope=contacts";
-// const authUrl =
-//   "https://app.hubspot.com/oauth/authorize" +
-//   `?client_id=${encodeURIComponent(CLIENT_ID)}` +
-//   `&scope=${encodeURIComponent(SCOPES)}` +
-//   `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  "https://app.hubspot.com/oauth/authorize" +
+  `?client_id=${encodeURIComponent(CLIENT_ID)}` +
+  `&scope=${encodeURIComponent(SCOPES)}` +
+  `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
 
-// // Redirect the user
+// Redirect the user
 // app.get("/", function(req, res, next) {
-
 //   return res.redirect(authUrl);
-//
 // });
 
 const token = {};
