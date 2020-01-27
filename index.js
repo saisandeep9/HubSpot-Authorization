@@ -4,21 +4,23 @@ const session = require("express-session");
 const axios = require("axios");
 const querystring = require("querystring");
 
+let http = require("http");
+let fs = require("fs");
+// fs.readFile("./home1.html");
+
+var cors = require("cors");
+
+app.use(cors());
 app.set("view engine", "pug");
 
 const config = require("config");
 
-const CLIENT_ID = config.get(`app.CLIENT_ID`);
-const REDIRECT_URI = config.get(`app.REDIRECT_URI`);
-const SCOPES = config.get(`app.SCOPES`);
-
 const authUrl =
   "https://app.hubspot.com/oauth/authorize" +
-  `?client_id=${encodeURIComponent(CLIENT_ID)}` +
-  `&scope=${encodeURIComponent(SCOPES)}` +
-  `&redirect_uri=${encodeURIComponent(REDIRECT_URI)}`;
+  `?client_id=${encodeURIComponent(config.get(`app.client_id`))}` +
+  `&scope=${encodeURIComponent(config.get(`app.scopes`))}` +
+  `&redirect_uri=${encodeURIComponent(config.get(`app.redirect_uri`))}`;
 
-// Redirect the user
 // app.get("/", function(req, res, next) {
 //   return res.redirect(authUrl);
 // });
@@ -46,19 +48,29 @@ app.get("/", async (req, res) => {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
     };
-
     const contacts =
       "https://api.hubapi.com/contacts/v1/lists/all/contacts/all";
     const resp = await axios.get(contacts, { headers });
     const data = resp.data;
-    res.render("home", {
-      token: accessToken,
-      contacts: data.contacts
-    });
+    // res.render("home", {
+    //   token: accessToken,
+    //   contacts: data.contacts
+    // });
+
+    // res.send({
+    //   token: accessToken,
+    //   contacts: data.contacts
+    // });
+
+    res.send(headers);
+    // res.redirect("http://localhost:3000");
 
     // res.json(data);
   } else {
-    res.render("home", { authUrl });
+    // Redirect the user
+    // res.render("home", { authUrl });
+    res.send({ authUrl });
+    // console.log("1");
   }
 });
 
@@ -68,9 +80,9 @@ app.get("/oauth-callback", async (req, res) => {
   if (req.query.code) {
     const authCodeProof = {
       grant_type: "authorization_code",
-      client_id: "86875988-d9fd-46f6-8ba6-ec33dcc79aba",
-      client_secret: "8ac3c44b-7709-448b-bba8-2ec8fe59445d",
-      redirect_uri: "http://localhost:9000/oauth-callback",
+      client_id: config.get(`app.client_id`),
+      client_secret: config.get(`app.client_secret`),
+      redirect_uri: config.get(`app.redirect_uri`),
       code: req.query.code
     };
     try {

@@ -1,7 +1,8 @@
 {
   "app": {
-    "CLIENT_ID": "86875988-d9fd-46f6-8ba6-ec33dcc79aba",
-    "REDIRECT_URI": "http://localhost:9000/oauth-callback",
-    "SCOPES": "contacts"
+    "client_id": "86875988-d9fd-46f6-8ba6-ec33dcc79aba",
+    "client_secret": "8ac3c44b-7709-448b-bba8-2ec8fe59445d",
+    "redirect_uri": "http://localhost:9000/oauth-callback",
+    "scopes": "contacts"
   }
 }

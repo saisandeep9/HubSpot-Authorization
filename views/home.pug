@@ -2,8 +2,8 @@ doctype html
 html( lang = "en")
 body
     if token
-        //- p your token is: #{token}
-        //- p data :#{contacts}
+        p your token is: #{token}
+        p data :#{contacts}
         p your contacts:
             table
                 tr
@@ -16,6 +16,9 @@ body
                  tr 
                   td #{contact.properties.firstname.value}
                   td #{contact.properties.lastname.value}
+                  td #{contact}
+                  each identity-profile in identity-profiles
+                  #{identity-profile.value}
                 
                 
     else
