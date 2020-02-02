@@ -4,8 +4,6 @@ const session = require("express-session");
 const axios = require("axios");
 const querystring = require("querystring");
 
-let http = require("http");
-let fs = require("fs");
 // fs.readFile("./home1.html");
 
 var cors = require("cors");
@@ -27,6 +25,7 @@ const authUrl =
 
 const token = {};
 
+let headers = {};
 app.use(
   session({
     secret: Math.random()
@@ -43,35 +42,26 @@ const auth = userId => {
 
 app.get("/", async (req, res) => {
   if (auth(req.sessionID)) {
-    const accessToken = token[req.sessionID];
-    const headers = {
+    accessToken = token[req.sessionID];
+    console.log("accesToken;-", accessToken);
+    headers = {
       Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
     };
-    const contacts =
-      "https://api.hubapi.com/contacts/v1/lists/all/contacts/all";
-    const resp = await axios.get(contacts, { headers });
-    const data = resp.data;
-    // res.render("home", {
-    //   token: accessToken,
-    //   contacts: data.contacts
-    // });
 
-    // res.send({
-    //   token: accessToken,
-    //   contacts: data.contacts
-    // });
-
-    res.send(headers);
-    // res.redirect("http://localhost:3000");
-
-    // res.json(data);
+    res.redirect("http://localhost:3000");
   } else {
-    // Redirect the user
-    // res.render("home", { authUrl });
     res.send({ authUrl });
-    // console.log("1");
   }
+});
+
+app.get("/getdata", async (req, res) => {
+  const contacts = "https://api.hubapi.com/contacts/v1/lists/all/contacts/all";
+  const resp = await axios.get(contacts, { headers });
+  const data = resp.data;
+  res.send(data);
+  // console.log("data:-", data);
+  console.log("data2:-");
 });
 
 app.get("/oauth-callback", async (req, res) => {
@@ -85,12 +75,16 @@ app.get("/oauth-callback", async (req, res) => {
       redirect_uri: config.get(`app.redirect_uri`),
       code: req.query.code
     };
+
     try {
       const responseBody = await axios.post(
         "https://api.hubapi.com/oauth/v1/token",
         querystring.stringify(authCodeProof)
       );
+
       token[req.sessionID] = responseBody.data.access_token;
+      console.log("Token:--", token);
+
       // res.json(responseBody.data.access_token);
       res.redirect("/");
     } catch (e) {
